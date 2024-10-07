@@ -1,4 +1,4 @@
-import { DevDataSource } from "../connections/db_dev";
+import { DevDataSource } from "../connections/dbDev";
 import { Task } from "../models/task";
 
 // 1) Estabelece conexão com a tabela alvo no banco de dados através de um cursor. Um cursor é um objeto que permite fazer consultas ao banco de dados via aplicação. Essas consultas são feitas na tabela do Repository que está na conexão do DataSource. 
@@ -14,6 +14,12 @@ type newTaskRequest = {
 
 type findTaskRequest = {
     id: string 
+}
+
+type updateTaskRequest = {
+    id: string,
+    description: string,
+    date_task: Date
 }
 
 export class TaskService {
@@ -42,9 +48,29 @@ async readAllTask() {
     return tasks 
 }
 
-async updateTask() {
+async updateTask({ id,description, date_task } : updateTaskRequest): Promise<Task | Error> {
+    const task = await cursor.findOne({ where: {id}}) 
+    if(!task) {
+        return new Error("Task not found!") 
+    }
+
+    task.description = description ? description : task.description
+    task.date_task = date_task ? date_task : task.date_task
+
+
+    // UPDATE tasks WHERE id = id SET description = description, date_task = date_task 
+    await cursor.save(task)
+    return task
 }
 
-async deleteTask() {
+async deleteTask({ id } : findTaskRequest): Promise<String | Error> {
+    const task = await cursor.findOne({ where: {id}}) 
+    if(!task) {
+        return new Error("Task not found!") 
+    }
+    await cursor.delete(task.id)
+    return "Task removed sucessfully!"
 }
 }
+
+// OPERADOR TERNÁRIO 
