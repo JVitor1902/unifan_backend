@@ -1,9 +1,24 @@
-import { Router, Request, Response } from "express"
+import { Router } from "express"
+import { TaskController } from "../controllers/taskController"
 
-const rotas = Router()
 
-//rotas.get("/", (request: Request, response: Response) => {
-//    return response.json("Home Page")
-//})
+const router = Router()
+const controller = new TaskController()
 
-export default rotas 
+// Rota da tela principal
+router.get("/", (request, response) => {
+    return response.json("home page")
+})
+
+// Rota Read All
+router.get("/tasks", controller.readAllTask)
+// Rota Read One
+router.get("/tasks/:id", controller.readOneTask)
+// Rota Create
+router.post("/tasks", controller.createTask)
+// Rota Update
+router.put("/tasks/:id", controller.updateTask)
+// Rota Delete
+router.delete("/tasks/:id", controller.deleteTask)
+
+export default router
