@@ -20,6 +20,7 @@
     "uuid": "^10.0.0"
   },
   "devDependencies": {
+    "@types/cors": "^2.8.17",
     "@types/express": "^4.17.17",
     "@types/node": "^22.7.4",
     "nodemo": "^1.0.0",
